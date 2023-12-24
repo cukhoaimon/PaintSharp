@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaintSharp", "PaintSharp\PaintSharp.csproj", "{AB5FCBB4-A713-4B83-824E-711F0F23FA11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IShape", "IShape\IShape.csproj", "{CDC07434-EC9C-4A6D-B832-62E5A0B39ECF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IShape", "IShape\IShape.csproj", "{CDC07434-EC9C-4A6D-B832-62E5A0B39ECF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Line", "Line\Line.csproj", "{ABE74469-1789-4F2E-B06D-79993DB7F0EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CDC07434-EC9C-4A6D-B832-62E5A0B39ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDC07434-EC9C-4A6D-B832-62E5A0B39ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDC07434-EC9C-4A6D-B832-62E5A0B39ECF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE74469-1789-4F2E-B06D-79993DB7F0EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE74469-1789-4F2E-B06D-79993DB7F0EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE74469-1789-4F2E-B06D-79993DB7F0EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE74469-1789-4F2E-B06D-79993DB7F0EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
