@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PaintSharp"
-                      mc:Ignorable="d"
+        xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:local="clr-namespace:PaintSharp" mc:Ignorable="d"
+        Loaded="RibbonWindow_Loaded"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -17,9 +18,17 @@
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
                     <Fluent:BackstageTabControl>
-                        <Fluent:BackstageTabItem Header="New" Icon="/assets/plus-solid.png" />
-                        <Fluent:BackstageTabItem Header="Print" />
-                        <Fluent:Button Header="Blue" />
+                        <Fluent:BackstageTabItem Header="New">
+                            <Fluent:BackstageTabItem.Icon>
+                                <fa5:ImageAwesome Icon="Regular_FileAlt" Foreground="White" Width="14" Height="14" />
+                            </Fluent:BackstageTabItem.Icon>
+                        </Fluent:BackstageTabItem>
+                        
+                        <Fluent:BackstageTabItem Header="Save">
+                            <Fluent:BackstageTabItem.Icon>
+                                <fa5:ImageAwesome Icon="Regular_Save" Foreground="White" Width="14" Height="14" />
+                            </Fluent:BackstageTabItem.Icon>
+                        </Fluent:BackstageTabItem>
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
@@ -27,27 +36,26 @@
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="File">
-                    <!--<Fluent:Button Header="Green"
-                                Icon="assets/plus-solid.png"
-                                LargeIcon="assets/plus-solid.png" />
-                    <Fluent:Button Header="Grey" 
-                                Icon="assets/plus-solid.png"
-                                LargeIcon="assets/plus-solid.png" />-->
-
                     <Fluent:Button Header="Add">
                         <Fluent:Button.Icon>
-                            <Image Source="/assets/plus-solid.png" />
+                            <fa5:ImageAwesome  Icon="Solid_Plus" Width="20" Height="20" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
                     <Fluent:Button Header="Open" >
                         <Fluent:Button.Icon>
-                            <Image Source="/assets/plus-solid.png" />
+                            <fa5:ImageAwesome  Icon="Regular_File"  Width="20" Height="20"/>
                         </Fluent:Button.Icon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
+                
+                <!-- List of drawable object -->
+                <Fluent:RibbonGroupBox Header="Shape" Name="shapeAction">
+                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
-
-        <Canvas Grid.Row="1" Background="Transparent" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp"></Canvas>
+        
+        <Canvas Grid.Row="1" Name="drawingCanvas" Background="White">
+        </Canvas>
+        <Canvas  Grid.Row="1" Background="Transparent" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp"></Canvas>
     </Grid>
 </Fluent:RibbonWindow>

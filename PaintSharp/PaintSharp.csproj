@@ -9,22 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="assets\plus-solid.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Fluent.Ribbon" Version="10.0.4" />
+    <PackageReference Include="FontAwesome5" Version="2.1.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IShape\IShape.csproj" />
     <ProjectReference Include="..\Line\Line.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="assets\plus-solid.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
 </Project>
