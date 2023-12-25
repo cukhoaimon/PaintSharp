@@ -14,8 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ellipse\Ellipse.csproj" />
     <ProjectReference Include="..\IShape\IShape.csproj" />
     <ProjectReference Include="..\Line\Line.csproj" />
+    <ProjectReference Include="..\Rectangle\Rectangle.csproj" />
   </ItemGroup>
 
 </Project>

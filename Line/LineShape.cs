@@ -1,9 +1,9 @@
 using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Windows;
-using US.IShape;
+using US_IShape;
 
-namespace USLine
+namespace US_Line
 {
     public class LineShape : IShape
     {
@@ -15,8 +15,10 @@ namespace USLine
                 Y1 = Points[0].Y,
                 X2 = Points[1].X,
                 Y2 = Points[1].Y,
-                Stroke = Brushes.Black,
-                StrokeThickness = 1,
+                Stroke = Configuration?.Stroke,
+                StrokeThickness = Configuration == null ? 1.0 : Configuration.StrokeThickness,
+                StrokeDashArray = Configuration?.StrokeDashArray,
+                Fill = Configuration?.Fill,
             };
         }
 

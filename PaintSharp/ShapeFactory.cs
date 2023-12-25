@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using US.IShape;
+using US_IShape;
 
 namespace PaintSharp
 {

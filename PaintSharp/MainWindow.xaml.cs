@@ -1,17 +1,12 @@
-﻿using System.IO;
+﻿using System.Configuration;
+using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Ribbon;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using US.IShape;
+using US_IShape;
+
 
 namespace PaintSharp
 {
@@ -26,27 +21,27 @@ namespace PaintSharp
             InitializeComponent();
         }
 
+        State state = new();
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            isDrawing = true;
-            _start = e.GetPosition(drawingCanvas);
+            state.IsDrawing = true;
+            state.StartPoint = e.GetPosition(drawingCanvas);
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDrawing)
+            if (state.IsDrawing)
             {
-                _end = e.GetPosition(drawingCanvas);
+                state.EndPoint = e.GetPosition(drawingCanvas);
 
-                Title = $"{_start.X}, {_start.Y} => {_end.X}, {_end.Y}";
-
-                IShape preview = _factory.Create(_choice);
-                preview.Points.Add(_start);
-                preview.Points.Add(_end);
+                IShape preview = _factory.Create(state.ShapeChoice);
+                preview.Points.Add(state.StartPoint);
+                preview.Points.Add(state.EndPoint);
+                preview.Configuration = (State)state.Clone();
 
                 drawingCanvas.Children.Clear();
 
-                foreach (var shape in _shapes)
+                foreach (var shape in state.Shapes)
                 {
                     drawingCanvas.Children.Add(shape.Draw());
                 }
@@ -57,20 +52,15 @@ namespace PaintSharp
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            IShape shape = _factory.Create(_choice);
-            shape.Points.Add(_start);
-            shape.Points.Add(_end);
+            IShape shape = _factory.Create(state.ShapeChoice);
+            shape.Points.Add(state.StartPoint);
+            shape.Points.Add(state.EndPoint);
+            shape.Configuration = (State)state.Clone();
 
-            _shapes.Add(shape);
-
-            isDrawing = false;
+            state.Shapes.Add(shape);
+            state.IsDrawing = false;
         }
 
-        bool isDrawing = false;
-        Point _start;
-        Point _end;
-        string _choice; // Line
-        List<IShape> _shapes = [];
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
             var abilities = new List<IShape>();
@@ -100,28 +90,63 @@ namespace PaintSharp
             _factory = new ShapeFactory();
             foreach (var ability in abilities)
             {
-                _factory.Prototypes.Add(
-                    ability.Name, ability
-                );
-                var btn = new Fluent.Button
+                _factory.Prototypes.Add(ability.Name, ability);
+                
+                var button = new Fluent.Button
                 {
                     Header = ability.Name,
                     Tag = ability.Name
-
                 };
-                btn.Click += (sender, args) =>
+
+                button.Click += (sender, args) =>
                 {
                     var control = (Button)sender;
-                    _choice = (string)control.Tag;
+                    state.ShapeChoice = (string)control.Tag;
                 };
                 
-                shapeAction.Items.Add(btn);
+                shapeAction.Items.Add(button);
             };
 
             if (abilities.Count > 0)
             {
-                _choice = abilities[0].Name;
+                state.ShapeChoice = abilities[0].Name;
             }
+        }
+
+        private void SetLine(object sender, RoutedEventArgs e)
+        {
+            state.Fill = null;
+            state.StrokeDashArray = null;
+        }
+
+        private void SetDashes(object sender, RoutedEventArgs e)
+        {
+            state.Fill = null;
+            state.StrokeDashArray = [1.5];
+        }
+
+        private void NewPaint(object sender, RoutedEventArgs e)
+        {
+            drawingCanvas.Children.Clear();
+            state.Shapes.Clear();
+        }
+
+        private void SaveImage(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void FillMode(object sender, RoutedEventArgs e)
+        {
+            state.Fill = state.Stroke;
+        }
+
+        private void ChangeBrushSize(object sender, SelectionChangedEventArgs e)
+        {
+            var control = sender as ComboBox;
+            var index = control?.SelectedIndex;
+
+            state.StrokeThickness = (double)(index == null ? 1 : index + 1);
         }
     }
 }

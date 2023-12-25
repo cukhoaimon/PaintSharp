@@ -14,6 +14,7 @@
         </Grid.RowDefinitions>
 
         <Fluent:Ribbon Grid.Row="0">
+            
             <!--Backstage-->
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
@@ -36,22 +37,80 @@
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="File">
-                    <Fluent:Button Header="Add">
+                    <Fluent:Button Header="New" Click="NewPaint">
                         <Fluent:Button.Icon>
-                            <fa5:ImageAwesome  Icon="Solid_Plus" Width="20" Height="20" />
+                            <fa5:ImageAwesome Icon="Regular_FileAlt"  Width="20" Height="20" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
-                    <Fluent:Button Header="Open" >
+                    <Fluent:Button Header="Save" Click="SaveImage">
                         <Fluent:Button.Icon>
-                            <fa5:ImageAwesome  Icon="Regular_File"  Width="20" Height="20"/>
+                            <fa5:ImageAwesome Icon="Regular_Save" Width="20" Height="20"/>
                         </Fluent:Button.Icon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
-                
+
+                <!-- Brushes type -->
+                <Fluent:RibbonGroupBox Header="Brushes" HorizontalContentAlignment="Center" Width="92" >
+                    <StackPanel Orientation="Vertical">
+                        <Fluent:ComboBox SelectionChanged="ChangeBrushSize">
+                            <Fluent:ComboBox.Icon>
+                                <fa5:FontAwesome Icon="Solid_Water" />
+                            </Fluent:ComboBox.Icon>
+
+                            <ComboBoxItem IsSelected="True">1</ComboBoxItem>
+                            <ComboBoxItem>2</ComboBoxItem>
+                            <ComboBoxItem>3</ComboBoxItem>
+                            <ComboBoxItem>4</ComboBoxItem>
+                        </Fluent:ComboBox>
+
+                        <Fluent:DropDownButton>
+                            <Fluent:DropDownButton.Icon>
+                                <fa5:ImageAwesome Icon="Solid_PaintBrush" Width="24" Height="24"/>
+                            </Fluent:DropDownButton.Icon>
+
+                            <Fluent:Button Header="Line" SizeDefinition="Small" Click="SetLine">
+                                <Fluent:Button.Icon>
+                                    <fa5:FontAwesome Icon="Solid_Minus" />
+                                </Fluent:Button.Icon>
+                            </Fluent:Button>
+                            <Fluent:Button Header="Dashes" SizeDefinition="Small" Click="SetDashes">
+                                <Fluent:Button.Icon>
+                                    <fa5:FontAwesome Icon="Solid_EllipsisH" />
+                                </Fluent:Button.Icon>
+                            </Fluent:Button>
+                        </Fluent:DropDownButton>
+                    </StackPanel>
+                    
+                </Fluent:RibbonGroupBox>
+
+                <!-- Tools box -->
+                <Fluent:RibbonGroupBox Header="Tools" Name="ToolsBox" HorizontalAlignment="Center">
+                    <Fluent:Button SizeDefinition="Small" Click="FillMode" >
+                        <Fluent:Button.Icon>
+                            <fa5:FontAwesome Icon="Solid_FillDrip" />
+                        </Fluent:Button.Icon>
+                    </Fluent:Button>
+
+                    <Fluent:Button SizeDefinition="Small">
+                        <Fluent:Button.Icon>
+                            <fa5:FontAwesome Icon="Solid_Font" />
+                        </Fluent:Button.Icon>
+                    </Fluent:Button>
+
+                </Fluent:RibbonGroupBox>
+
+                <Fluent:RibbonGroupBox Header="Size"
+                       Grid.IsSharedSizeScope="True">
+
+                    
+                </Fluent:RibbonGroupBox>
+
                 <!-- List of drawable object -->
                 <Fluent:RibbonGroupBox Header="Shape" Name="shapeAction">
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
+            
+            
         </Fluent:Ribbon>
         
         <Canvas Grid.Row="1" Name="drawingCanvas" Background="White">
