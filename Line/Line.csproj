@@ -11,4 +11,10 @@
     <ProjectReference Include="..\IShape\IShape.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="line.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

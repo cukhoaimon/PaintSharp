@@ -1,10 +1,12 @@
 ﻿using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using US_IShape;
 
 
@@ -26,8 +28,10 @@ namespace PaintSharp
         {
             state.IsDrawing = true;
             state.StartPoint = e.GetPosition(drawingCanvas);
+            
+            // add a temp element
+            drawingCanvas.Children.Add(new UIElement());
         }
-
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
             if (state.IsDrawing)
@@ -38,14 +42,9 @@ namespace PaintSharp
                 preview.Points.Add(state.StartPoint);
                 preview.Points.Add(state.EndPoint);
                 preview.Configuration = (State)state.Clone();
-
-                drawingCanvas.Children.Clear();
-
-                foreach (var shape in state.Shapes)
-                {
-                    drawingCanvas.Children.Add(shape.Draw());
-                }
-
+                
+                // for avoid filckering
+                drawingCanvas.Children.RemoveAt(drawingCanvas.Children.Count - 1);
                 drawingCanvas.Children.Add(preview.Draw());
             }
         }
@@ -59,6 +58,8 @@ namespace PaintSharp
 
             state.Shapes.Add(shape);
             state.IsDrawing = false;
+
+            drawingCanvas.Children.Add(shape.Draw());
         }
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
@@ -81,6 +82,7 @@ namespace PaintSharp
                         if (typeof(IShape).IsAssignableFrom(type))
                         {
                             var shape = Activator.CreateInstance(type) as IShape;
+                            
                             abilities.Add(shape!);
                         }
                     }
@@ -91,11 +93,12 @@ namespace PaintSharp
             foreach (var ability in abilities)
             {
                 _factory.Prototypes.Add(ability.Name, ability);
-                
+
                 var button = new Fluent.Button
                 {
                     Header = ability.Name,
-                    Tag = ability.Name
+                    Tag = ability.Name,
+                    Icon = ability.Preview,
                 };
 
                 button.Click += (sender, args) =>
@@ -133,7 +136,7 @@ namespace PaintSharp
 
         private void SaveImage(object sender, RoutedEventArgs e)
         {
-
+            TakeScreenShot(drawingCanvas);
         }
 
         private void FillMode(object sender, RoutedEventArgs e)
@@ -147,6 +150,22 @@ namespace PaintSharp
             var index = control?.SelectedIndex;
 
             state.StrokeThickness = (double)(index == null ? 1 : index + 1);
+        }
+
+        private void TakeScreenShot(object control)
+        {
+            FrameworkElement element = control as FrameworkElement;
+            if (element == null)
+                throw new Exception("Invalid parameter");
+
+            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)element.ActualWidth , (int)element.ActualHeight + 120 , 96, 96, PixelFormats.Pbgra32);
+            renderTargetBitmap.Render(element);
+            PngBitmapEncoder pngImage = new();
+            pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+            using (Stream fileStream = File.Create(@"C:\Users\phucm\Desktop\saved.png"))
+            {
+                pngImage.Save(fileStream);
+            }
         }
     }
 }

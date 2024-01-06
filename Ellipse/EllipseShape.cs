@@ -7,6 +7,14 @@ namespace US_Ellipse
 {
     public class EllipseShape : IShape
     {
+        public EllipseShape() {
+            Preview = new System.Windows.Media.Imaging.BitmapImage();
+            Preview.BeginInit();
+            Preview.UriSource = new Uri(
+                RelativeToAbsoluteConverter.Convert(@"/ellipse.png"),
+                UriKind.RelativeOrAbsolute);
+            Preview.EndInit();
+        }
         public override UIElement Draw()
         {
             int endPointPicker = (Points[1].X - Points[0].X < 0) ? 1 : 0;

@@ -9,6 +9,14 @@ namespace US_Rectangle
 {
     public class RectangleShape : IShape
     {
+        public RectangleShape() {
+            Preview = new System.Windows.Media.Imaging.BitmapImage();
+            Preview.BeginInit();
+            Preview.UriSource = new Uri(
+                RelativeToAbsoluteConverter.Convert(@"/rectangle.png"),
+                UriKind.RelativeOrAbsolute);
+            Preview.EndInit();
+        }
         public override UIElement Draw()
         {
             int endPointPicker = (Points[1].X - Points[0].X < 0) ? 1 : 0;

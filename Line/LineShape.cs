@@ -7,6 +7,15 @@ namespace US_Line
 {
     public class LineShape : IShape
     {
+        public LineShape() {
+            Preview = new System.Windows.Media.Imaging.BitmapImage();
+            Preview.BeginInit();
+            Preview.UriSource = new Uri(
+                RelativeToAbsoluteConverter.Convert(@"/line.png"),
+                UriKind.RelativeOrAbsolute);
+            Preview.EndInit();
+        }
+
         public override UIElement Draw()
         {
             return new Line()

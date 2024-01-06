@@ -1,4 +1,8 @@
 using System.Windows;
+using System.Windows.Media.Imaging;
+
+using ProtoBuf;
+
 
 namespace US_IShape
 {
@@ -9,5 +13,6 @@ namespace US_IShape
         public List<Point> Points { get; set; } = [];
         public abstract UIElement Draw();
         public abstract IShape Clone();
+        public BitmapImage? Preview { get; set; }
     }
 }

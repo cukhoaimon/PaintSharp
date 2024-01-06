@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <Fluent:Ribbon Grid.Row="0">
-            
+
             <!--Backstage-->
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
@@ -24,7 +24,7 @@
                                 <fa5:ImageAwesome Icon="Regular_FileAlt" Foreground="White" Width="14" Height="14" />
                             </Fluent:BackstageTabItem.Icon>
                         </Fluent:BackstageTabItem>
-                        
+
                         <Fluent:BackstageTabItem Header="Save">
                             <Fluent:BackstageTabItem.Icon>
                                 <fa5:ImageAwesome Icon="Regular_Save" Foreground="White" Width="14" Height="14" />
@@ -80,7 +80,7 @@
                             </Fluent:Button>
                         </Fluent:DropDownButton>
                     </StackPanel>
-                    
+
                 </Fluent:RibbonGroupBox>
 
                 <!-- Tools box -->
@@ -99,22 +99,15 @@
 
                 </Fluent:RibbonGroupBox>
 
-                <Fluent:RibbonGroupBox Header="Size"
-                       Grid.IsSharedSizeScope="True">
-
-                    
-                </Fluent:RibbonGroupBox>
-
                 <!-- List of drawable object -->
                 <Fluent:RibbonGroupBox Header="Shape" Name="shapeAction">
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
-            
-            
         </Fluent:Ribbon>
-        
+
         <Canvas Grid.Row="1" Name="drawingCanvas" Background="White">
         </Canvas>
-        <Canvas  Grid.Row="1" Background="Transparent" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp"></Canvas>
+        <Canvas  Grid.Row="1"  Background="Transparent" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp">
+        </Canvas>
     </Grid>
 </Fluent:RibbonWindow>
