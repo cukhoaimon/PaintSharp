@@ -3,23 +3,24 @@ using System.Windows;
 using System.Windows.Controls;
 using US_IShape;
 
-namespace US_Ellipse
+namespace US_Square
 {
-    public class CircleShape : IShape
+    public class SquareShape : IShape
     {
-        public override string Name => "Circle";
-        public CircleShape() {
+        public override string Name => "Square";
+        public SquareShape()
+        {
             Preview = new System.Windows.Media.Imaging.BitmapImage();
             Preview.BeginInit();
             Preview.UriSource = new Uri(
-                RelativeToAbsoluteConverter.Convert(@"/circle.png"),
+                RelativeToAbsoluteConverter.Convert(@"/square.png"),
                 UriKind.RelativeOrAbsolute);
             Preview.EndInit();
         }
 
         public override IShape Clone()
         {
-            return new CircleShape();
+            return new SquareShape();
         }
 
         public override UIElement Draw()
@@ -36,14 +37,12 @@ namespace US_Ellipse
             var width = right - left;
             var height = width;
 
-            var element = new System.Windows.Shapes.Ellipse
+            var element = new System.Windows.Shapes.Rectangle()
             {
+                Fill = Configuration?.Fill,
                 Stroke = Configuration?.Stroke,
                 StrokeDashArray = Configuration?.StrokeDashArray,
                 StrokeThickness = Configuration == null ? 1.0 : Configuration.StrokeThickness,
-                Fill = Configuration?.Fill,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
                 Width = width,
                 Height = height
             };
@@ -54,4 +53,5 @@ namespace US_Ellipse
             return element;
         }
     }
+
 }

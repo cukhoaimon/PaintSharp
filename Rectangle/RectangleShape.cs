@@ -19,9 +19,17 @@ namespace US_Rectangle
         }
         public override UIElement Draw()
         {
-            int endPointPicker = (Points[1].X - Points[0].X < 0) ? 1 : 0;
-            double width = Math.Abs(Points[1].X - Points[0].X);
-            double height = Math.Abs(Points[1].Y - Points[0].Y);
+            var start = Points[0];
+            var end = Points[1];
+
+            var left = Math.Min(end.X, start.X);
+            var top = Math.Min(end.Y, start.Y);
+
+            var right = Math.Max(end.X, start.X);
+            var bottom = Math.Max(end.Y, start.Y);
+
+            var width = right - left;
+            var height = bottom - top;
 
             var element = new Rectangle
             {
@@ -33,8 +41,8 @@ namespace US_Rectangle
                 Height = height
             };
 
-            Canvas.SetLeft(element, Points[endPointPicker].X);
-            Canvas.SetTop(element, Points[endPointPicker].Y);
+            Canvas.SetLeft(element, left);
+            Canvas.SetTop(element, top);
 
             return element;
         }
