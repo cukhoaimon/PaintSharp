@@ -24,6 +24,7 @@ namespace PaintSharp
     /// </summary>
     public partial class MainWindow
     {
+        private bool isCtrlKeyPressed = false;
         ShapeFactory _factory = ShapeFactory.GetInstance();
         State state = new();
         List<SolidColorBrush> _corlorList = [];
@@ -83,6 +84,10 @@ namespace PaintSharp
             // Do tim cac kha nang
             string folder = AppDomain.CurrentDomain.BaseDirectory;
             var fis = (new DirectoryInfo(folder)).GetFiles("*.dll");
+
+            // thêm sự kiện cho phím tắt
+            PreviewKeyDown += MainWindow_PreviewKeyDown;
+            PreviewKeyUp += MainWindow_PreviewKeyUp;
 
             foreach (var fi in fis)
             {
@@ -360,6 +365,61 @@ namespace PaintSharp
             state.Buffer.RemoveAt(lastIndex);
 
             Redraw();
+        }
+
+        private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            double zoomValue = e.NewValue;
+
+            // Scale màn hình nhưng lỗi hơi ngu tí, chỗ này cần đo lại ribbon
+            ScaleTransform scaleTransform = new ScaleTransform(zoomValue, zoomValue);
+            if (drawingCanvas != null)
+            {
+                drawingCanvas.LayoutTransform = scaleTransform;
+            }
+        }
+
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                isCtrlKeyPressed = true;
+            }
+
+            if (isCtrlKeyPressed)
+            {
+                switch (e.Key)
+                {
+                    case Key.Z:
+                        // Perform Undo
+                        Undo_Click(null, null);
+                        break;
+
+                    case Key.Y:
+                        // Perform Redo
+                        Redo_Click(null, null);
+                        break;
+                }
+            }
+        }
+
+        private void MainWindow_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                isCtrlKeyPressed = false;
+            }
+        }
+
+        private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (isCtrlKeyPressed)
+            {
+                // Perform Zoom In/Out based on mouse wheel delta
+                double delta = e.Delta > 0 ? 0.1 : -0.1;
+                zoomSlider.Value += delta;
+                e.Handled = true;
+            }
         }
     }
 }

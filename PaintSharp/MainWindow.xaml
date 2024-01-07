@@ -1,54 +1,76 @@
-﻿<Fluent:RibbonWindow  xmlns:Fluent="urn:fluent-ribbon" x:Class="PaintSharp.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:fa5="http://schemas.fontawesome.com/icons/"
-        xmlns:local="clr-namespace:PaintSharp" mc:Ignorable="d"
-        Loaded="RibbonWindow_Loaded" Closed="RibbonWindow_Closed"
-        Title="MainWindow" Height="450" Width="800">
+﻿<Fluent:RibbonWindow  xmlns:Fluent="urn:fluent-ribbon"
+                      x:Class="PaintSharp.MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+                      xmlns:local="clr-namespace:PaintSharp"
+                      mc:Ignorable="d"
+                      Loaded="RibbonWindow_Loaded"
+                      Closed="RibbonWindow_Closed"
+                      Title="MainWindow"
+                      Height="450"
+                      Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
         <Fluent:Ribbon Grid.Row="0">
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="File">
-                    <Fluent:Button Header="Clear" Click="NewPaint">
+                    <Fluent:Button Header="Clear"
+                                   Click="NewPaint">
                         <Fluent:Button.Icon>
-                            <fa5:ImageAwesome Icon="Regular_FileAlt"  Width="20" Height="20" />
+                            <fa5:ImageAwesome Icon="Regular_FileAlt"
+                                              Width="20"
+                                              Height="20" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
-                    <Fluent:Button Header="Save" Click="SaveImage">
+                    <Fluent:Button Header="Save"
+                                   Click="SaveImage">
                         <Fluent:Button.Icon>
-                            <fa5:ImageAwesome Icon="Regular_Save" Width="20" Height="20"/>
+                            <fa5:ImageAwesome Icon="Regular_Save"
+                                              Width="20"
+                                              Height="20" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
-                    <Fluent:Button Header="Load" Click="LoadImage">
+                    <Fluent:Button Header="Load"
+                                   Click="LoadImage">
                         <Fluent:Button.Icon>
-                            <fa5:ImageAwesome Icon="Solid_FileImport" Width="20" Height="20" />
+                            <fa5:ImageAwesome Icon="Solid_FileImport"
+                                              Width="20"
+                                              Height="20" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Control">
-                    <Fluent:Button Header="Undo" Click="Undo_Click" >
+                    <Fluent:Button Header="Undo"
+                                   Click="Undo_Click">
                         <Fluent:Button.Icon>
-                            <fa5:ImageAwesome Icon="Solid_Undo" Width="20" Height="20" />
+                            <fa5:ImageAwesome Icon="Solid_Undo"
+                                              Width="20"
+                                              Height="20" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
-                    
-                    <Fluent:Button Header="Redo" Click="Redo_Click">
+
+                    <Fluent:Button Header="Redo"
+                                   Click="Redo_Click">
                         <Fluent:Button.Icon>
-                            <fa5:ImageAwesome Icon="Solid_Redo" Width="20" Height="20"/>
+                            <fa5:ImageAwesome Icon="Solid_Redo"
+                                              Width="20"
+                                              Height="20" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
 
                 <!-- Brushes type -->
-                <Fluent:RibbonGroupBox Header="Brushes" HorizontalContentAlignment="Center" Width="92" >
+                <Fluent:RibbonGroupBox Header="Brushes"
+                                       HorizontalContentAlignment="Center"
+                                       Width="92">
                     <StackPanel Orientation="Vertical">
                         <Fluent:ComboBox SelectionChanged="ChangeBrushSize">
                             <Fluent:ComboBox.Icon>
@@ -62,15 +84,21 @@
 
                         <Fluent:DropDownButton>
                             <Fluent:DropDownButton.Icon>
-                                <fa5:ImageAwesome Icon="Solid_PaintBrush" Width="24" Height="24"/>
+                                <fa5:ImageAwesome Icon="Solid_PaintBrush"
+                                                  Width="24"
+                                                  Height="24" />
                             </Fluent:DropDownButton.Icon>
 
-                            <Fluent:Button Header="Line" SizeDefinition="Small" Click="SetLine">
+                            <Fluent:Button Header="Line"
+                                           SizeDefinition="Small"
+                                           Click="SetLine">
                                 <Fluent:Button.Icon>
                                     <fa5:FontAwesome Icon="Solid_Minus" />
                                 </Fluent:Button.Icon>
                             </Fluent:Button>
-                            <Fluent:Button Header="Dashes" SizeDefinition="Small" Click="SetDashes">
+                            <Fluent:Button Header="Dashes"
+                                           SizeDefinition="Small"
+                                           Click="SetDashes">
                                 <Fluent:Button.Icon>
                                     <fa5:FontAwesome Icon="Solid_EllipsisH" />
                                 </Fluent:Button.Icon>
@@ -81,8 +109,11 @@
                 </Fluent:RibbonGroupBox>
 
                 <!-- Tools box -->
-                <Fluent:RibbonGroupBox Header="Tools" Name="ToolsBox" HorizontalAlignment="Center">
-                    <Fluent:Button SizeDefinition="Small" Click="FillMode" >
+                <Fluent:RibbonGroupBox Header="Tools"
+                                       Name="ToolsBox"
+                                       HorizontalAlignment="Center">
+                    <Fluent:Button SizeDefinition="Small"
+                                   Click="FillMode">
                         <Fluent:Button.Icon>
                             <fa5:FontAwesome Icon="Solid_FillDrip" />
                         </Fluent:Button.Icon>
@@ -96,7 +127,12 @@
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox>
-                    <ListView x:Name="ColorListView" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" Width="302" >
+                    <ListView x:Name="ColorListView"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Width="302">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -106,7 +142,9 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Button Click="SetCorlor">
-                                    <Rectangle Fill="{Binding}" Height="12" Width="12"/>
+                                    <Rectangle Fill="{Binding}"
+                                               Height="12"
+                                               Width="12" />
                                 </Button>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -115,15 +153,53 @@
                 </Fluent:RibbonGroupBox>
 
                 <!-- List of drawable object -->
-                <Fluent:RibbonGroupBox Header="Shape" Name="shapeAction">
+                <Fluent:RibbonGroupBox Header="Shape"
+                                       Name="shapeAction">
                 </Fluent:RibbonGroupBox>
 
 
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
 
-        <Canvas Grid.Row="1" Name="drawingCanvas" Background="White">
+        <!-- Thanh Zoom -->
+        <Slider x:Name="zoomSlider"
+                Minimum="0.1"
+                Maximum="3"
+                Value="1"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                Margin="10,0,0,10"
+                Width="200"
+                ValueChanged="ZoomSlider_ValueChanged"
+                Grid.Row="2"/>
+
+        <!-- Thanh công cụ cố định ở phía dưới -->
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
+            <Button Content="Tool 1"
+                    Margin="5" />
+            <Button Content="Tool 2"
+                    Margin="5" />
+            <!-- Thêm các công cụ khác theo nhu cầu -->
+        </StackPanel>
+
+        <Canvas Grid.Row="1"
+                Name="drawingCanvas"
+                Background="White"
+                RenderTransformOrigin="0.5,0.5">
+            <Canvas.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding ElementName=zoomSlider, Path=Value}"
+                                ScaleY="{Binding ElementName=zoomSlider, Path=Value}" />
+            </Canvas.LayoutTransform>
         </Canvas>
-        <Canvas Grid.Row="1" Background="Transparent" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp" />
+
+        <Canvas Grid.Row="1"
+                Background="Transparent"
+                MouseDown="Canvas_MouseDown"
+                MouseMove="Canvas_MouseMove"
+                MouseUp="Canvas_MouseUp"
+                MouseWheel="Canvas_MouseWheel" />
     </Grid>
 </Fluent:RibbonWindow>
