@@ -183,7 +183,6 @@ namespace PaintSharp
             {
                 drawingCanvas.Children.Add(shape.Draw());
             }
-
         }
         private void SetLine(object sender, RoutedEventArgs e)
         {
@@ -254,7 +253,9 @@ namespace PaintSharp
 
             // Get the path from user
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            _ = dialog.ShowDialog();
+            var result = dialog.ShowDialog();
+
+            if (result != System.Windows.Forms.DialogResult.OK) return;
 
             // Add file name
             var selectedPath = dialog.SelectedPath + @"\image.png";
@@ -308,14 +309,50 @@ namespace PaintSharp
 
             var selectedImage = dialog.FileName;
 
-            if (selectedImage == null) return;
+            if (selectedImage == "") return;
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(selectedImage);
+            bitmap.EndInit();
 
             var img = new Image
             {
-                Source = new BitmapImage { UriSource = new Uri(selectedImage) }
+                Source = bitmap
             };
 
             drawingCanvas.Children.Add(img);
+        }
+
+        private void Redraw()
+        {
+            drawingCanvas.Children.Clear();
+            foreach (var shape in state.Shapes)
+            {
+                drawingCanvas.Children.Add(shape.Draw());
+            }
+        }
+
+        private void Undo_Click(object sender, RoutedEventArgs e)
+        {
+            if (state.Shapes.Count == 0) return;
+
+            var lastIndex = state.Shapes.Count - 1;
+
+            state.Buffer.Add(state.Shapes[lastIndex]);
+            state.Shapes.RemoveAt(lastIndex);
+
+            Redraw();
+        }
+        private void Redo_Click(object sender, RoutedEventArgs e)
+        {
+            if (state.Buffer.Count == 0) return;
+
+            var lastIndex = state.Buffer.Count - 1;
+            state.Shapes.Add(state.Buffer[lastIndex]);
+            state.Buffer.RemoveAt(lastIndex);
+
+            Redraw();
         }
     }
 }

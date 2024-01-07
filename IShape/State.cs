@@ -17,9 +17,11 @@ namespace US_IShape
         public double StrokeThickness { get; set; }
         public string ShapeChoice { get; set; }
         public List<IShape> Shapes { get; set; }
+        public List<IShape> Buffer { get; set; }
         public State() {
             IsDrawing = false;
             Shapes = [];
+            Buffer = [];
             ShapeChoice = String.Empty;
             Stroke = Brushes.Black;
             Fill = null;

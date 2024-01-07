@@ -14,26 +14,6 @@
         </Grid.RowDefinitions>
 
         <Fluent:Ribbon Grid.Row="0">
-
-            <!--Backstage-->
-            <!--<Fluent:Ribbon.Menu>
-                <Fluent:Backstage>
-                    <Fluent:BackstageTabControl>
-                        <Fluent:BackstageTabItem Header="New">
-                            <Fluent:BackstageTabItem.Icon>
-                                <fa5:ImageAwesome Icon="Regular_FileAlt" Foreground="White" Width="14" Height="14" />
-                            </Fluent:BackstageTabItem.Icon>
-                        </Fluent:BackstageTabItem>
-
-                        <Fluent:BackstageTabItem Header="Save">
-                            <Fluent:BackstageTabItem.Icon>
-                                <fa5:ImageAwesome Icon="Regular_Save" Foreground="White" Width="14" Height="14" />
-                            </Fluent:BackstageTabItem.Icon>
-                        </Fluent:BackstageTabItem>
-                    </Fluent:BackstageTabControl>
-                </Fluent:Backstage>
-            </Fluent:Ribbon.Menu>-->
-
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="File">
@@ -53,6 +33,19 @@
                         </Fluent:Button.Icon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Control">
+                    <Fluent:Button Header="Undo" Click="Undo_Click" >
+                        <Fluent:Button.Icon>
+                            <fa5:ImageAwesome Icon="Solid_Undo" Width="20" Height="20" />
+                        </Fluent:Button.Icon>
+                    </Fluent:Button>
+                    
+                    <Fluent:Button Header="Redo" Click="Redo_Click">
+                        <Fluent:Button.Icon>
+                            <fa5:ImageAwesome Icon="Solid_Redo" Width="20" Height="20"/>
+                        </Fluent:Button.Icon>
+                    </Fluent:Button>
+                </Fluent:RibbonGroupBox>
 
                 <!-- Brushes type -->
                 <Fluent:RibbonGroupBox Header="Brushes" HorizontalContentAlignment="Center" Width="92" >
@@ -61,7 +54,6 @@
                             <Fluent:ComboBox.Icon>
                                 <fa5:FontAwesome Icon="Solid_Water" />
                             </Fluent:ComboBox.Icon>
-
                             <ComboBoxItem IsSelected="True">1</ComboBoxItem>
                             <ComboBoxItem>2</ComboBoxItem>
                             <ComboBoxItem>3</ComboBoxItem>
@@ -96,11 +88,11 @@
                         </Fluent:Button.Icon>
                     </Fluent:Button>
 
-                    <Fluent:Button SizeDefinition="Small">
+                    <!--<Fluent:Button SizeDefinition="Small">
                         <Fluent:Button.Icon>
                             <fa5:FontAwesome Icon="Solid_Font" />
                         </Fluent:Button.Icon>
-                    </Fluent:Button>
+                    </Fluent:Button>-->
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox>
@@ -132,7 +124,6 @@
 
         <Canvas Grid.Row="1" Name="drawingCanvas" Background="White">
         </Canvas>
-        <Canvas  Grid.Row="1"  Background="Transparent" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp">
-        </Canvas>
+        <Canvas Grid.Row="1" Background="Transparent" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp" />
     </Grid>
 </Fluent:RibbonWindow>
