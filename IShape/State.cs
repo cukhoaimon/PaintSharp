@@ -13,7 +13,7 @@ namespace US_IShape
         public DoubleCollection? StrokeDashArray { get; set; }
         
         public SolidColorBrush Stroke { get; set; }
-        public SolidColorBrush Fill { get; set; }
+        public SolidColorBrush? Fill { get; set; }
         public double StrokeThickness { get; set; }
         public string ShapeChoice { get; set; }
         public List<IShape> Shapes { get; set; }

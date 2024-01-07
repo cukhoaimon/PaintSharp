@@ -1,14 +1,21 @@
-﻿using System.Configuration;
+﻿using PaintSharp.Serialize;
+using System.Configuration;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using US_IShape;
 
+using SystemRectangle = System.Windows.Shapes.Rectangle;
 
 namespace PaintSharp
 {
@@ -17,18 +24,26 @@ namespace PaintSharp
     /// </summary>
     public partial class MainWindow
     {
-        ShapeFactory _factory = new();
+        ShapeFactory _factory = ShapeFactory.GetInstance();
+        State state = new();
+        List<SolidColorBrush> _corlorList = [];
+
+        readonly Encoding encoding = Encoding.UTF8;
+        readonly string Seperator = "\r\n";
+        readonly string Signature = "cukhoaimon";
+        readonly int SignatureLength = 10;
+        readonly string LAST_SESSION_DIR = AppDomain.CurrentDomain.BaseDirectory + @"\~LastSession";
+        readonly int SIZE_LENGTH = 6;
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        State state = new();
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             state.IsDrawing = true;
             state.StartPoint = e.GetPosition(drawingCanvas);
-            
+
             // add a temp element
             drawingCanvas.Children.Add(new UIElement());
         }
@@ -42,13 +57,12 @@ namespace PaintSharp
                 preview.Points.Add(state.StartPoint);
                 preview.Points.Add(state.EndPoint);
                 preview.Configuration = (State)state.Clone();
-                
+
                 // for avoid filckering
                 drawingCanvas.Children.RemoveAt(drawingCanvas.Children.Count - 1);
                 drawingCanvas.Children.Add(preview.Draw());
             }
         }
-
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             IShape shape = _factory.Create(state.ShapeChoice);
@@ -82,14 +96,13 @@ namespace PaintSharp
                         if (typeof(IShape).IsAssignableFrom(type))
                         {
                             var shape = Activator.CreateInstance(type) as IShape;
-                            
+
                             abilities.Add(shape!);
                         }
                     }
                 }
             }
 
-            _factory = new ShapeFactory();
             foreach (var ability in abilities)
             {
                 _factory.Prototypes.Add(ability.Name, ability);
@@ -106,7 +119,7 @@ namespace PaintSharp
                     var control = (Button)sender;
                     state.ShapeChoice = (string)control.Tag;
                 };
-                
+
                 shapeAction.Items.Add(button);
             };
 
@@ -114,6 +127,66 @@ namespace PaintSharp
             {
                 state.ShapeChoice = abilities[0].Name;
             }
+
+            //get all possible color
+            PropertyInfo[] colors = typeof(Brushes).GetProperties();
+            var listTring = colors.Select(color => color.Name).ToList();
+
+            _corlorList = listTring.Select(color =>
+            {
+                Color c = (Color)ColorConverter.ConvertFromString(color);
+                return new SolidColorBrush(c);
+            }).ToList();
+
+            ColorListView.ItemsSource = _corlorList;
+
+
+            // LOAD THE PREVIOUS SESSION
+            FileStream stream;
+            try
+            {
+                stream = new(path: LAST_SESSION_DIR, mode: FileMode.Open, access: FileAccess.Read, share: FileShare.Read);
+            }
+            catch
+            {
+                return;
+            }
+
+            var buffer = new byte[SignatureLength];
+            int byteRead = stream.Read(buffer, 0, SignatureLength);
+
+            string _signature = encoding.GetString(buffer);
+
+            if (_signature != Signature) return;
+            
+            stream.Position += 2; // flush "/r/n"
+
+            buffer = new byte[SIZE_LENGTH];
+            stream.Read(buffer, 0, SIZE_LENGTH);
+
+            while (encoding.GetString(buffer.SkipLast(4).ToArray()) != Seperator)
+            {
+                var intSize = Int16.Parse(encoding.GetString(buffer));
+                var byteData = new byte[intSize];
+
+                stream.Read(byteData, 0, intSize);
+
+                var stringData = encoding.GetString(byteData);
+
+                var shapeFound = ShapeSerializer.Deserialize(stringData);
+                state.Shapes.Add(shapeFound);
+                stream.Position += 2; // flush "/r/n"
+
+                stream.Read(buffer, 0, SIZE_LENGTH);
+                //stream.Position += 2; // flush "/r/n"
+            }
+            stream.Close();
+
+            foreach (var shape in state.Shapes)
+            {
+                drawingCanvas.Children.Add(shape.Draw());
+            }
+
         }
 
         private void SetLine(object sender, RoutedEventArgs e)
@@ -152,6 +225,19 @@ namespace PaintSharp
             state.StrokeThickness = (double)(index == null ? 1 : index + 1);
         }
 
+        private void SetCorlor(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var selectedRectangle = btn?.Content as SystemRectangle;
+            var selectedColor = selectedRectangle?.Fill;
+
+                
+            if (selectedColor == null) return;
+
+            if (state.Fill != null) state.Fill = (SolidColorBrush)selectedColor;
+
+            state.Stroke = (SolidColorBrush)selectedColor;
+        }
         private void TakeScreenShot(object control)
         {
             FrameworkElement element = control as FrameworkElement;
@@ -166,6 +252,42 @@ namespace PaintSharp
             {
                 pngImage.Save(fileStream);
             }
+        }
+
+        private void RibbonWindow_Closed(object sender, EventArgs e)
+        {
+            var drewShapes = state.Shapes;
+            var protocols = drewShapes.Select(shape =>
+            {
+                var proto = ShapeSerializer.Serialize(shape);
+                return encoding.GetBytes(proto);
+            }).ToList();
+
+            using FileStream stream = new(path: LAST_SESSION_DIR, mode: FileMode.Create, access: FileAccess.Write, share: FileShare.None);
+
+            // Length = 10
+            var signatureBuffer = encoding.GetBytes(Signature);
+            var seperatorBuffer = encoding.GetBytes(Seperator);
+
+            stream.Write(signatureBuffer, 0, signatureBuffer.Length);
+            stream.Write(seperatorBuffer, 0, seperatorBuffer.Length);
+        
+            foreach(var shape in protocols)
+            {
+                var stringSize = shape.Length.ToString();
+                if (stringSize.Length < SIZE_LENGTH) {
+                    stringSize = "0" + stringSize;
+                }
+
+                var size = encoding.GetBytes(stringSize);
+                stream.Write(size, 0, size.Length);
+                stream.Write(seperatorBuffer, 0, seperatorBuffer.Length);
+                stream.Write(shape, 0, shape.Length);
+                stream.Write(seperatorBuffer, 0, seperatorBuffer.Length);
+            }
+
+            stream.Write(seperatorBuffer, 0, seperatorBuffer.Length);
+            stream.Close();
         }
     }
 }

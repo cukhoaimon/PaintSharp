@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
         xmlns:local="clr-namespace:PaintSharp" mc:Ignorable="d"
-        Loaded="RibbonWindow_Loaded"
+        Loaded="RibbonWindow_Loaded" Closed="RibbonWindow_Closed"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -96,12 +96,32 @@
                             <fa5:FontAwesome Icon="Solid_Font" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
+                </Fluent:RibbonGroupBox>
 
+                <Fluent:RibbonGroupBox>
+                    <ListView x:Name="ColorListView" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" Width="302" >
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Button Click="SetCorlor">
+                                    <Rectangle Fill="{Binding}" Height="12" Width="12"/>
+                                </Button>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
                 </Fluent:RibbonGroupBox>
 
                 <!-- List of drawable object -->
                 <Fluent:RibbonGroupBox Header="Shape" Name="shapeAction">
                 </Fluent:RibbonGroupBox>
+
+
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
 
