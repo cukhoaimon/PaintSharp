@@ -198,8 +198,15 @@ namespace PaintSharp
 
         private void NewPaint(object sender, RoutedEventArgs e)
         {
-            drawingCanvas.Children.Clear();
-            state.Shapes.Clear();
+            MessageBoxResult result = MessageBox.Show("Bạn có chắc muốn xóa toàn bộ tiến trình vẽ chứ?",
+                                          "Confirmation",
+                                          MessageBoxButton.YesNo,
+                                          MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                drawingCanvas.Children.Clear();
+                state.Shapes.Clear();
+            }
         }
 
         private void SaveImage(object sender, RoutedEventArgs e)

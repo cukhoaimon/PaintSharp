@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Circle\Circle.csproj" />
     <ProjectReference Include="..\Ellipse\Ellipse.csproj" />
     <ProjectReference Include="..\IShape\IShape.csproj" />
     <ProjectReference Include="..\Line\Line.csproj" />
