@@ -140,17 +140,13 @@ namespace PaintSharp
 
             ColorListView.ItemsSource = _corlorList;
 
-
             // LOAD THE PREVIOUS SESSION
             FileStream stream;
             try
             {
                 stream = new(path: LAST_SESSION_DIR, mode: FileMode.Open, access: FileAccess.Read, share: FileShare.Read);
             }
-            catch
-            {
-                return;
-            }
+            catch { return; }
 
             var buffer = new byte[SignatureLength];
             int byteRead = stream.Read(buffer, 0, SignatureLength);
@@ -178,7 +174,6 @@ namespace PaintSharp
                 stream.Position += 2; // flush "/r/n"
 
                 stream.Read(buffer, 0, SIZE_LENGTH);
-                //stream.Position += 2; // flush "/r/n"
             }
             stream.Close();
 
@@ -248,7 +243,13 @@ namespace PaintSharp
             renderTargetBitmap.Render(element);
             PngBitmapEncoder pngImage = new();
             pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
-            using (Stream fileStream = File.Create(@"C:\Users\phucm\Desktop\saved.png"))
+
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            _ = dialog.ShowDialog();
+
+            var selectedPath = dialog.SelectedPath + @"\image.png";
+
+            using (Stream fileStream = File.Create(selectedPath))
             {
                 pngImage.Save(fileStream);
             }
