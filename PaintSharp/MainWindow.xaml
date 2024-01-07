@@ -16,7 +16,7 @@
         <Fluent:Ribbon Grid.Row="0">
 
             <!--Backstage-->
-            <Fluent:Ribbon.Menu>
+            <!--<Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
                     <Fluent:BackstageTabControl>
                         <Fluent:BackstageTabItem Header="New">
@@ -32,12 +32,12 @@
                         </Fluent:BackstageTabItem>
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
-            </Fluent:Ribbon.Menu>
+            </Fluent:Ribbon.Menu>-->
 
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="File">
-                    <Fluent:Button Header="New" Click="NewPaint">
+                    <Fluent:Button Header="Clear" Click="NewPaint">
                         <Fluent:Button.Icon>
                             <fa5:ImageAwesome Icon="Regular_FileAlt"  Width="20" Height="20" />
                         </Fluent:Button.Icon>
@@ -45,6 +45,11 @@
                     <Fluent:Button Header="Save" Click="SaveImage">
                         <Fluent:Button.Icon>
                             <fa5:ImageAwesome Icon="Regular_Save" Width="20" Height="20"/>
+                        </Fluent:Button.Icon>
+                    </Fluent:Button>
+                    <Fluent:Button Header="Load" Click="LoadImage">
+                        <Fluent:Button.Icon>
+                            <fa5:ImageAwesome Icon="Solid_FileImport" Width="20" Height="20" />
                         </Fluent:Button.Icon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>

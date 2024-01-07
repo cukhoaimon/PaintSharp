@@ -33,7 +33,7 @@ namespace PaintSharp
         readonly string Signature = "cukhoaimon";
         readonly int SignatureLength = 10;
         readonly string LAST_SESSION_DIR = AppDomain.CurrentDomain.BaseDirectory + @"\~LastSession";
-        readonly int SIZE_LENGTH = 6;
+        readonly int SIZE_LENGTH = 5;
         public MainWindow()
         {
             InitializeComponent();
@@ -159,8 +159,9 @@ namespace PaintSharp
 
             buffer = new byte[SIZE_LENGTH];
             stream.Read(buffer, 0, SIZE_LENGTH);
+            stream.Position += 2; // flush "/r/n"
 
-            while (encoding.GetString(buffer.SkipLast(4).ToArray()) != Seperator)
+            while (encoding.GetString(buffer.SkipLast(SIZE_LENGTH - 2).ToArray()) != Seperator)
             {
                 var intSize = Int16.Parse(encoding.GetString(buffer));
                 var byteData = new byte[intSize];
@@ -174,6 +175,7 @@ namespace PaintSharp
                 stream.Position += 2; // flush "/r/n"
 
                 stream.Read(buffer, 0, SIZE_LENGTH);
+                stream.Position += 2; // flush "/r/n"
             }
             stream.Close();
 
@@ -183,7 +185,6 @@ namespace PaintSharp
             }
 
         }
-
         private void SetLine(object sender, RoutedEventArgs e)
         {
             state.Fill = null;
@@ -239,22 +240,31 @@ namespace PaintSharp
             if (element == null)
                 throw new Exception("Invalid parameter");
 
-            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)element.ActualWidth , (int)element.ActualHeight + 120 , 96, 96, PixelFormats.Pbgra32);
+            // Get the current Canvas
+            RenderTargetBitmap renderTargetBitmap = new((int)element.ActualWidth , (int)element.ActualHeight + 120 , 96, 96, PixelFormats.Pbgra32);
             renderTargetBitmap.Render(element);
-            PngBitmapEncoder pngImage = new();
-            pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
 
+            // Delete the empty created by ribbon windows
+            var cropped = new CroppedBitmap(renderTargetBitmap,
+                new Int32Rect { X = 0, Y = 120, Width = (int)element.ActualWidth, Height = (int)element.ActualHeight });
+
+            // Convert to Png
+            PngBitmapEncoder pngImage = new();
+            pngImage.Frames.Add(BitmapFrame.Create(cropped));
+
+            // Get the path from user
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             _ = dialog.ShowDialog();
 
+            // Add file name
             var selectedPath = dialog.SelectedPath + @"\image.png";
 
+            // Save 
             using (Stream fileStream = File.Create(selectedPath))
             {
                 pngImage.Save(fileStream);
             }
         }
-
         private void RibbonWindow_Closed(object sender, EventArgs e)
         {
             var drewShapes = state.Shapes;
@@ -276,7 +286,7 @@ namespace PaintSharp
             foreach(var shape in protocols)
             {
                 var stringSize = shape.Length.ToString();
-                if (stringSize.Length < SIZE_LENGTH) {
+                while (stringSize.Length < SIZE_LENGTH) {
                     stringSize = "0" + stringSize;
                 }
 
@@ -289,6 +299,23 @@ namespace PaintSharp
 
             stream.Write(seperatorBuffer, 0, seperatorBuffer.Length);
             stream.Close();
+        }
+
+        private void LoadImage(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.OpenFileDialog();
+            _ = dialog.ShowDialog();
+
+            var selectedImage = dialog.FileName;
+
+            if (selectedImage == null) return;
+
+            var img = new Image
+            {
+                Source = new BitmapImage { UriSource = new Uri(selectedImage) }
+            };
+
+            drawingCanvas.Children.Add(img);
         }
     }
 }
